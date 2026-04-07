@@ -194,6 +194,11 @@ $(function () {
     // User changes the search string: apply filters
     $("#search").keyup(applyFilters);
 
+    window.clearSearch = function() {
+            $("#search").val("");
+            applyFilters();
+        };
+
     function switchUrlFormat(format) {
         var url = new URL(window.location.href);
         url.searchParams.delete("urls");
