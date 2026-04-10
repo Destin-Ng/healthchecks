@@ -201,18 +201,38 @@
                     </td>
                 </tr>
             </table>
+            {% if duration_stats %}
+            <table id="details-schedule">
+                <tr>
+                    <th>Avg Runtime</th>
+                    <td><span class="value">{{ duration_stats.avg|floatformat:1 }}s</span></td>
+                </tr>
+                <tr>
+                    <th>Min Runtime</th>
+                    <td><span class="value">{{ duration_stats.min|floatformat:1 }}s</span></td>
+                </tr>
+                <tr>
+                    <th>Max Runtime</th>
+                    <td><span class="value">{{ duration_stats.max|floatformat:1 }}s</span></td>
+                </tr>
+                <tr>
+                    <th>Samples</th>
+                    <td><span class="value">{{ duration_stats.count }}</span></td>
+                </tr>
+            </table>
+            {% endif %}
             {% if rw %}
             <div class="text-right rw">
                 <button
-                    id="edit-timeout"
-                    class="btn btn-sm btn-default timeout-grace"
-                    data-code="{{ check.code }}"
-                    data-status-url="{% url 'hc-status-single' check.code %}"
-                    data-kind="{{ check.kind }}"
-                    data-timeout="{{ check.timeout.total_seconds|floatformat:'0' }}"
-                    data-grace="{{ check.grace.total_seconds|floatformat:'0' }}"
-                    data-schedule="{{ check.schedule }}"
-                    data-tz="{{ check.tz }}">
+                        id="edit-timeout"
+                        class="btn btn-sm btn-default timeout-grace"
+                        data-code="{{ check.code }}"
+                        data-status-url="{% url 'hc-status-single' check.code %}"
+                        data-kind="{{ check.kind }}"
+                        data-timeout="{{ check.timeout.total_seconds|floatformat:'0' }}"
+                        data-grace="{{ check.grace.total_seconds|floatformat:'0' }}"
+                        data-schedule="{{ check.schedule }}"
+                        data-tz="{{ check.tz }}">
                     Change Schedule&hellip;</button>
             </div>
             {% endif %}

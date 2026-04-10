@@ -1012,6 +1012,7 @@ def details(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
         "tz_switches": _tz_switches(request.profile, check),
         "is_copied": "copied" in request.GET,
         "all_tags": " ".join(sorted(all_tags)),
+        "duration_stats": check.duration_stats(),
     }
 
     return render(request, "front/details.html", ctx)
