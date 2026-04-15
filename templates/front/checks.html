@@ -156,6 +156,24 @@
             Add Check
         </button>
     {% endif %}
+    <label class="checkbox-container">
+        <input
+            type="checkbox"
+            name="down"
+            value="true"
+            {% if form.down.value %} checked {% endif %}>
+        <span class="checkmark"></span>
+        Filter by keywords in the Subject line
+    </label>
+<label class="checkbox-container">
+        <input
+            type="checkbox"
+            name="down"
+            value="true"
+            {% if form.down.value %} checked {% endif %}>
+        <span class="checkmark"></span>
+        Filter by keywords in the Message Body
+    </label>
 </div>
 
 
