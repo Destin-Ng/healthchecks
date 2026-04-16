@@ -49,7 +49,7 @@ jobs:
                   sudo apt-get update -qq
                   sudo apt-get install -y libcurl4-openssl-dev libpython3-dev libssl-dev
                   python -m pip install --upgrade pip
-                  pip install -r requirements.txt -r requirements-dev.txt pytest playwright
+                  pip install -r requirements.txt -r requirements-dev.txt pytest playwright pytest-playwright
                   playwright install --with-deps
             - name: Run Tests
               env:
