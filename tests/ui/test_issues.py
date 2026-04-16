@@ -32,9 +32,9 @@ def test_clear_search_button(page: Page):
     expect(clear_button).to_be_hidden()
 
     search_input.click()
-    page.keyboard.type("test")
+    search_input.press_sequentially("test")
     expect(search_input).to_have_value("test")
-    
+
     expect(clear_button).to_be_visible()
 
     clear_button.click()
