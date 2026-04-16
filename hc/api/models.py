@@ -289,7 +289,7 @@ class Check(models.Model):
             return self.last_duration
         return None
 
-    def duration_stats(self) -> dict | None:
+    def duration_stats(self) -> dict[str, float | int] | None:
         pings = list(self.visible_pings.order_by("-id"))
         prepare_durations(pings)
         durations = [
