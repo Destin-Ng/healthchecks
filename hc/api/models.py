@@ -306,6 +306,24 @@ class Check(models.Model):
             "count": len(durations),
         }
 
+    def downtime_stats(self, months: int = 6, tz: str = "UTC") -> dict[str, object] | None:
+        records = self.downtimes(months, tz)
+        records_with_data = [r for r in records if not r.no_data and r.count]
+        if not records_with_data:
+            return None
+        total_incidents = sum(r.count for r in records_with_data)
+        total_duration = sum((r.duration for r in records_with_data), td())
+        avg_duration = total_duration / total_incidents
+        worst = max(records_with_data, key=lambda r: r.duration)
+        return {
+            "total_incidents": total_incidents,
+            "total_duration": total_duration,
+            "avg_duration": avg_duration,
+            "worst_month": worst.boundary,
+            "worst_duration": worst.duration,
+            "months": months,
+        }
+
     def get_grace_start(self, *, with_started: bool = True) -> datetime | None:
         """Return the datetime when the grace period starts.
 

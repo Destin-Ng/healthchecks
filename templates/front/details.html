@@ -221,6 +221,28 @@
                 </tr>
             </table>
             {% endif %}
+
+            {% if check.downtime_stats %}
+            {% with ds=check.downtime_stats %}
+            <table id="details-schedule">
+                <tr>
+                    <th>Avg Downtime</th>
+                    <td><span class="value">{{ ds.avg_duration|hc_approx_duration }}</span></td>
+                </tr>
+                <tr>
+                    <th>Total Incidents</th>
+                    <td><span class="value">{{ ds.total_incidents }}</span>
+                        <div class="subtitle">(last {{ ds.months }} months)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Total Downtime</th>
+                    <td><span class="value">{{ ds.total_duration|hc_approx_duration }}</span></td>
+                </tr>
+            </table>
+            {% endwith %}
+            {% endif %}
+
             {% if rw %}
             <div class="text-right rw">
                 <button
