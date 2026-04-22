@@ -294,3 +294,42 @@ class DetailsTestCase(BaseTestCase):
         r = self.client.get(self.url)
         self.assertContains(r, "DOWN – Foo – Mychecks", status_code=200)
         self.assertContains(r, "favicon_down.svg")
+
+    @time_machine.travel("2020-02-01 00:00+00:00")
+    def test_it_shows_avg_downtime_in_schedule(self) -> None:
+        self.check.created = datetime(2019, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+        self.check.save()
+
+        # First downtime: 1 hour
+        f1 = Flip(owner=self.check)
+        f1.created = datetime(2020, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
+        f1.old_status = "up"
+        f1.new_status = "down"
+        f1.save()
+
+        f2 = Flip(owner=self.check)
+        f2.created = datetime(2020, 1, 15, 13, 0, 0, tzinfo=timezone.utc)
+        f2.old_status = "down"
+        f2.new_status = "up"
+        f2.save()
+
+        # Second downtime: 3 hours
+        f3 = Flip(owner=self.check)
+        f3.created = datetime(2020, 1, 20, 10, 0, 0, tzinfo=timezone.utc)
+        f3.old_status = "up"
+        f3.new_status = "down"
+        f3.save()
+
+        f4 = Flip(owner=self.check)
+        f4.created = datetime(2020, 1, 20, 13, 0, 0, tzinfo=timezone.utc)
+        f4.old_status = "down"
+        f4.new_status = "up"
+        f4.save()
+
+        self.client.login(username="alice@example.org", password="password")
+        r = self.client.get(self.url)
+
+        # 2 incidents total 4 hours, avg = 2 hours
+        self.assertContains(r, "Avg Downtime", status_code=200)
+        self.assertContains(r, "2 h 0 min")
+        self.assertContains(r, "Total Incidents")
