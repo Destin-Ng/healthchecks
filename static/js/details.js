@@ -183,6 +183,12 @@ $(function () {
         $(".filter-kw").prop("disabled", !enableInputs);
     });
 
+     // Enable/disable fields in the "Filtering Rules" modal
+    $("input.filter-toggle_2").on("change", function() {
+        var enableInputs = $("input.filter-toggle_2:checked").length > 0;
+        $(".filter-kw").prop("disabled", !enableInputs);
+    });
+
     // If the URL hash is #ping-<number>,  open the "Ping Details" dialog
     if (document.location.hash.indexOf("#ping-") === 0) {
         var n = parseInt(document.location.hash.substr(6));
