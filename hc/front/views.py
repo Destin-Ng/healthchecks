@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import email
 import logging
 import os
@@ -71,6 +72,16 @@ LAST_PING_TMPL = get_template("front/last_ping_cell.html")
 EVENTS_TMPL = get_template("front/details_events.html")
 DOWNTIMES_TMPL = get_template("front/details_downtimes.html")
 
+def prettify_json(body: str | None) -> str | None:
+    if not body:
+        return body
+    
+    try:
+        parsed = json.loads(body)
+    except json.JSONDecodeError:
+        return body
+    
+    return (json.dumps(parsed, indent=2, ensure_ascii=False))
 
 def _tags_counts(checks: Iterable[Check]) -> tuple[list[tuple[str, str, str]], int]:
     num_down = 0
@@ -753,10 +764,12 @@ def ping_details(
         return render(request, "front/ping_details_not_found.html")
 
     body = ping.get_body()
+    pretty_body = prettify_json(body)
+
     ctx = {
         "check": check,
         "ping": ping,
-        "body": body,
+        "body": pretty_body,
         "plain": None,
         "html": None,
         "active": None,
