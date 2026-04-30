@@ -295,3 +295,17 @@ class PingDetailsTestCase(BaseTestCase):
         with patch("hc.api.models.get_object", Mock(side_effect=GetObjectError)):
             r = self.client.get(self.url)
         self.assertContains(r, "please check back later", status_code=200)
+
+    def test_pretty_json_body(self) -> None:
+        Ping.objects.create(
+            owner=self.check,
+            n=1,
+            body_raw=b'{"status":"ok", "count":2}'
+        )
+
+        self.client.login(username="alice@example.org", password="password")
+        r = self.client.get(self.url)
+
+        self.assertContains(r, "status")
+        self.assertContains(r, "count")
+        self.assertContains(r, "\n") # check the formatting is happening correctly
