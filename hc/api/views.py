@@ -215,6 +215,15 @@ def ping(
     if check.methods == "POST" and method != "POST":
         action = "ign"
 
+    file = open("filters.txt", "r")
+
+    content = file.readlines()
+
+    subject_line = content[0][0:len(content[0]) - 1]
+    message_body = content[1]
+
+    file.close()
+
     if action != "ign" and check.filter_http_body:
         body_text = body.decode()
         if check.failure_kw and match_keywords(body_text, check.failure_kw):
@@ -225,6 +234,8 @@ def ping(
             action = "start"
         elif check.filter_default_fail:
             action = "fail"
+        elif match_keywords(body_text, subject_line) or match_keywords(body_text, message_body):
+            action = "success"
         else:
             action = "ign"
 
