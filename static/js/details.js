@@ -42,6 +42,11 @@ $(function () {
         return false;
     });
 
+    $("#markdown-toggle-switch").change(function () {
+        $("#markdown-toggle-switch").html("zap")
+        console.log("crazy work 2");
+    });
+
     $("#current-status-text").on("click", "#resume-btn", function() {
         $("#resume-form").submit();
         return false;
