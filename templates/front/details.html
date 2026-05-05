@@ -241,6 +241,13 @@
                     <th>Total Downtime</th>
                     <td><span class="value">{{ ds.total_duration|hc_approx_duration }}</span></td>
                 </tr>
+                <tr>
+                    <th>Worst Month</th>
+                    <td>
+                        <span class="value">{{ ds.worst_month }}</span>
+                        <div class="subtitle">{{ ds.worst_duration|hc_approx_duration }}</div>
+                    </td>
+                </tr>
             </table>
             {% endwith %}
             {% endif %}
