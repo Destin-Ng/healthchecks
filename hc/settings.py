@@ -306,10 +306,10 @@ def immutable_file_test(path: Any, url: str) -> bool:
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
 
 # SMTP credentials for sending email
-EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "http://localhost:8000")
 EMAIL_PORT = envint("EMAIL_PORT", "587")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = envsecret("EMAIL_HOST_PASSWORD", "")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "username")
+EMAIL_HOST_PASSWORD = envsecret("EMAIL_HOST_PASSWORD", "password")
 EMAIL_USE_TLS = envbool("EMAIL_USE_TLS", "True")
 EMAIL_USE_SSL = envbool("EMAIL_USE_SSL", "False")
 EMAIL_USE_VERIFICATION = envbool("EMAIL_USE_VERIFICATION", "True")

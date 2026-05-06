@@ -1014,6 +1014,7 @@ class Channel(models.Model):
     last_notify_duration = models.DurationField(null=True, blank=True)
     last_error = models.CharField(max_length=200, blank=True)
     checks = models.ManyToManyField(Check)
+    channels_list = []
 
     def __str__(self) -> str:
         if self.name:
@@ -1067,6 +1068,9 @@ class Channel(models.Model):
         signed_token = signer.sign(self.make_token())
         args = [self.code, signed_token]
         return absolute_reverse("hc-unsubscribe-alerts", args=args)
+
+    def set_channels_list(self, channels):
+        self.channels_list = channels
 
     def send_signal_captcha_alert(self, challenge: str, raw: str) -> None:
         subject = "Signal CAPTCHA proof required"

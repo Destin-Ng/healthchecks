@@ -66,6 +66,8 @@ from hc.lib.urls import absolute_reverse
 
 logger = logging.getLogger(__name__)
 
+channels_list = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+
 VALID_SORT_VALUES = ("name", "-name", "last_ping", "-last_ping", "created")
 STATUS_TEXT_TMPL = get_template("front/log_status_text.html")
 LAST_PING_TMPL = get_template("front/last_ping_cell.html")
@@ -1229,6 +1231,12 @@ def channels(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     # Sort groups first, then in the creation order
     channels = channels.annotate(is_group=Case(When(kind="group", then=0), default=1))
     channels = channels.order_by("is_group", "created")
+
+    for i in range(channels.count()):
+        if not channels_list[i].__contains__(channels[i].last_notify):
+            channels_list[i].append(channels[i].last_notify)
+            channels[i].set_channels_list(channels_list[i])
+
 
     ctx = {
         "page": "channels",
