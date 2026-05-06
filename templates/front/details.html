@@ -50,7 +50,10 @@
         <div class="details-block">
             <h2>Description</h2>
             {% if check.desc %}
-            {{ check.desc|linebreaks|urlize }}
+
+            <p id="visible-description">{{ check.desc }}</p>
+            <p style="display: none;" id="description-placeholder">{{ check.desc }}</p>
+
             <div class="text-right">
                 <button id="edit-desc" class="btn btn-sm btn-default">
                     Edit Description&hellip;
@@ -433,5 +436,6 @@
 <script src="{% static 'js/ping_details.js' %}"></script>
 <script src="{% static 'js/details.js' %}"></script>
 <script src="{% static 'js/slug-suggestions.js' %}"></script>
+<script src="{% static 'js/marked.umd.js' %}"></script>
 {% endcompress %}
 {% endblock %}

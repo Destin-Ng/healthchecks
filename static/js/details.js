@@ -38,13 +38,20 @@ $(function () {
     $("#edit-desc").click(function() {
         $('#update-name-modal').modal("show");
         $("#update-desc-input").focus();
-
         return false;
     });
 
     $("#markdown-toggle-switch").change(function () {
-        $("#markdown-toggle-switch").html("zap")
-        console.log("crazy work 2");
+        const old = $("#description-placeholder").html();
+        const enableMarkdown = $('#markdown-toggle-switch').is(':checked');
+        var markdown_rendered = ""
+
+        if (enableMarkdown) {
+            markdown_rendered = marked.parse(old)
+            $("#visible-description").html( markdown_rendered )
+        } else {
+            $("#visible-description").html( old )
+        }
     });
 
     $("#current-status-text").on("click", "#resume-btn", function() {
