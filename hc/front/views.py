@@ -1201,6 +1201,7 @@ def badges(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
 @login_required
 def channels(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     project, rw = _get_project_for_user(request, code)
+    clipboard_text = pyperclip.paste()
 
     if request.method == "POST":
         if not rw:
@@ -1234,18 +1235,19 @@ def channels(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     channels = channels.annotate(is_group=Case(When(kind="group", then=0), default=1))
     channels = channels.order_by("is_group", "created")
 
-    count = len(channels)
+    if clipboard_text == "update_the_notification_list_482842284298743y831247237321eywjqhew76":
+        count = len(channels)
 
-    for i in range(count):
-        channels[i].notification_list.clear()
+        for i in range(count):
+            channels[i].notification_list.clear()
 
-    for i in range(count):
-        email_list[i].append(channels[i].last_notify.today())
+        for i in range(count):
+            email_list[i].append(channels[i].last_notify.today())
 
-    for i in range(count):
-        for element in email_list[i]:
-            if not channels[i].notification_list.__contains__(element):
-                channels[i].notification_list.append(element)
+        for i in range(count):
+            for element in email_list[i]:
+                if not channels[i].notification_list.__contains__(element):
+                    channels[i].notification_list.append(element)
 
     ctx = {
         "page": "channels",
@@ -1281,9 +1283,8 @@ def channels(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
         "enable_zulip": settings.ZULIP_ENABLED is True,
         "use_payments": settings.USE_PAYMENTS,
     }
-    text = pyperclip.paste()
 
-    if text == "open_the_notification_list_482842284276":
+    if clipboard_text == "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276":
         pyperclip.copy("")
         return render(request, "front/notifications_list.html", ctx)
     else:

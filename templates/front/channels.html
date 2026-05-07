@@ -82,7 +82,7 @@
                     {% if ch.kind == "email" and ch.disabled %}Fix&hellip;{% else %}Edit{% endif %}
                 </a>
                 {% endif %}
-                <form action="{% url 'hc-channel-test' ch.code %}" method="post">
+                <form action="{% url 'hc-channel-test' ch.code %}" method="post" onclick="updateNotification()">
                     {% csrf_token %}
                     <button
                         class="btn btn-sm btn-default"
@@ -105,6 +105,18 @@
         </tr>
         {% endfor %}
     </table>
+        <script>
+            function updateNotification() {
+
+                const type = "text/plain";
+                const clipboardItemData = {
+                    [type]: "update_the_notification_list_482842284298743y831247237321eywjqhew76",
+                };
+                const clipboardItem = new ClipboardItem(clipboardItemData);
+                navigator.clipboard.write([clipboardItem]);
+                console.log("ok")
+            }
+        </script>
     {% else %}
         <div class="alert alert-danger">
             <p> The project "{{ project }}" does not have any integrations
@@ -126,7 +138,7 @@
 
           const type = "text/plain";
           const clipboardItemData = {
-            [type]: "open_the_notification_list_482842284276",
+            [type]: "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276",
           };
           const clipboardItem = new ClipboardItem(clipboardItemData);
           navigator.clipboard.write([clipboardItem]);
