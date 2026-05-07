@@ -9,3 +9,4 @@ time-machine==3.2.0
 types-Markdown
 types-pycurl
 types-pygments
+types-pyperclip
