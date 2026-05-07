@@ -4,6 +4,8 @@ import hashlib
 import json
 import socket
 import uuid
+import pyperclip
+
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -1014,7 +1016,8 @@ class Channel(models.Model):
     last_notify_duration = models.DurationField(null=True, blank=True)
     last_error = models.CharField(max_length=200, blank=True)
     checks = models.ManyToManyField(Check)
-    channels_list = []
+    notification_list = []
+    index = 0
 
     def __str__(self) -> str:
         if self.name:
@@ -1069,8 +1072,15 @@ class Channel(models.Model):
         args = [self.code, signed_token]
         return absolute_reverse("hc-unsubscribe-alerts", args=args)
 
-    def set_channels_list(self, channels):
-        self.channels_list = channels
+    def notification_list_string(self) -> str:
+        str = "["
+        i = 0
+        for c in self.notification_list:
+            duck = "" if i == len(self.notification_list) - 1  else ", "
+            str += f'{naturaltime(c)}{duck}'
+            i += 1
+        str += "]"
+        return str
 
     def send_signal_captcha_alert(self, challenge: str, raw: str) -> None:
         subject = "Signal CAPTCHA proof required"

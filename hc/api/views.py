@@ -478,7 +478,6 @@ def channels(request: ApiRequest) -> JsonResponse:
     channels = [ch.to_dict() for ch in q]
     return JsonResponse({"channels": channels})
 
-
 @authorize_read
 def get_check(request: ApiRequest, code: UUID) -> HttpResponse:
     check = get_object_or_404(Check, code=code)

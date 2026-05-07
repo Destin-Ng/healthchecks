@@ -1,0 +1,118 @@
+{% extends "base_project.html" %}
+{% load compress humanize static hc_extras %}
+
+{% block title %}Notifications - {{ site_name }}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+{% if messages %}
+<div class="col-sm-12">
+    {% for message in messages %}
+        <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="col-sm-12">
+    {% if channels %}
+    <table class="table channels-table {% if rw %}rw{% endif %}">
+        <tr>
+            <th></th>
+            <th class="th-name">Name, Details</th>
+            <th class="th-checks">Assigned Checks</th>
+            <th>Status</th>
+            <th>Notifications History</th>
+            <th></th>
+        </tr>
+        {% for ch in channels %}
+        <tr class="channel-row kind-{{ ch.kind }}">
+            <td class="icon-cell">
+                <img src="{% static ch.icon_path %}" alt="{{ ch.get_kind_display }}" class="kind-{{ ch.kind }}" />
+            </td>
+            <td>
+                <div class="edit-name" data-toggle="modal" data-target="#name-{{ ch.code }}">
+                    {% if ch.name %}
+                    {{ ch.name }}
+                    {% else %}
+                    <div class="unnamed">unnamed</div>
+                    {% endif %}
+                    <div class="channel-details-mini">
+                    {% include "front/channel_description.html" with ch=ch %}
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="edit-checks"
+                     data-url="{% url 'hc-channel-checks' ch.code %}">
+                     {{ ch.n_checks }} check{{ ch.n_checks|pluralize }}
+                </div>
+            </td>
+            <td>
+                {% if ch.disabled %}
+                    <span class="label label-danger">Disabled</span>
+                {% elif ch.kind == "email" and not ch.email_verified %}
+                    <span class="label label-default">Unconfirmed</span>
+                {% else %}
+                    Ready to deliver
+                {% endif %}
+            </td>
+            <td>
+                {% if ch.last_notify %}
+                    {% if ch.last_error %}
+                    <span class="text-danger" data-toggle="tooltip" title="{{ ch.last_error }}">
+                        <strong>Failed</strong>, {{ ch.notification_list_string }}
+                    </span>
+                    {% else %}
+                    Delivered, {{ ch.notification_list_string }}
+                    {% endif %}
+                {% else %}
+                Never
+                {% endif %}
+                {% if ch.kind == "sms" or ch.kind == "whatsapp" %}
+                    <p>Used {{ profile.sms_sent_this_month }} of {{ profile.sms_limit }} sends this month.</p>
+                {% endif %}
+                {% if ch.kind == "call" %}
+                    <p>Used {{ profile.calls_sent_this_month }} of {{ profile.call_limit }} phone calls this month.</p>
+                {% endif %}
+            </td>
+            <td class="actions">
+                {% if ch.is_editable and rw %}
+
+                {% endif %}
+                {% if rw %}
+                    <form action="{% url 'hc-channel-test' ch.code %}" method="post">
+                    {% csrf_token %}
+                    <button
+                        class="btn btn-sm btn-default"
+                        data-toggle="tooltip"
+                        title="Send a test notification using this integration"
+                        type="submit">
+                        Test!
+                    </button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <div class="alert alert-danger">
+            <p> The project "{{ project }}" does not have any integrations
+                set up yet.
+            </p>
+            <p>With no configured integrations, {{ site_name }}
+                <strong>will not send any notifications</strong>
+                when checks change state.
+            </p>
+        </div>
+    {% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+{% compress js %}
+<script src="{% static 'js/channels.js' %}"></script>
+{% endcompress %}
+{% endblock %}

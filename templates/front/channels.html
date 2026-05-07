@@ -117,14 +117,24 @@
         </div>
     {% endif %}
 
+    <li>
+        <a href="" onclick="updateClipboard()" class="btn btn-primary">Notifications</a>
+    </li>
+
+    <script>
+        function updateClipboard() {
+
+          const type = "text/plain";
+          const clipboardItemData = {
+            [type]: "open_the_notification_list_482842284276",
+          };
+          const clipboardItem = new ClipboardItem(clipboardItemData);
+          navigator.clipboard.write([clipboardItem]);
+          console.log("ok")
+        }
+    </script>
 
     {% if rw %}
-
-        {% if enable_mattermost %}
-        <li>
-            <a href="{% url 'hc-add-mattermost' project.code %}" class="btn btn-primary">Notifications</a>
-        </li>
-        {% endif %}
 
     <h1 class="ai-title">Add More</h1>
     <ul class="add-integration">
@@ -208,6 +218,17 @@
             <h2>Matrix</h2>
             <p>Post notifications to a Matrix room.</p>
             <a href="{% url 'hc-add-matrix' project.code %}" class="btn btn-primary">Add Integration</a>
+        </li>
+        {% endif %}
+
+        {% if enable_mattermost %}
+        <li>
+            <img src="{% static 'img/mattermost.png' %}"
+                class="icon kind-mattermost" alt="Mattermost icon" />
+
+            <h2>Mattermost</h2>
+            <p>High Trust Messaging for the Enterprise.</p>
+            <a href="{% url 'hc-add-mattermost' project.code %}" class="btn btn-primary">Add Integration</a>
         </li>
         {% endif %}
 
