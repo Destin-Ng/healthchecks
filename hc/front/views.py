@@ -1235,7 +1235,8 @@ def channels(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     channels = channels.annotate(is_group=Case(When(kind="group", then=0), default=1))
     channels = channels.order_by("is_group", "created")
 
-    if clipboard_text == "update_the_notification_list_482842284298743y831247237321eywjqhew76":
+    if clipboard_text == "update_the_notification_list_482842284298743y831247237321eywjqhew76" or clipboard_text == "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276 nkwnkrwnkeh22uiu2":
+        pyperclip.copy("")
         count = len(channels)
 
         for i in range(count):
@@ -1284,7 +1285,7 @@ def channels(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
         "use_payments": settings.USE_PAYMENTS,
     }
 
-    if clipboard_text == "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276":
+    if clipboard_text == "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276" or clipboard_text == "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276 nkwnkrwnkeh22uiu2":
         pyperclip.copy("")
         return render(request, "front/notifications_list.html", ctx)
     else:

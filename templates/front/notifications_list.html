@@ -81,7 +81,7 @@
 
                 {% endif %}
                 {% if rw %}
-                    <form action="{% url 'hc-channel-test' ch.code %}" method="post">
+                    <form action="{% url 'hc-channel-test' ch.code %}" method="post" onclick="stay()">
                     {% csrf_token %}
                     <button
                         class="btn btn-sm btn-default"
@@ -96,6 +96,18 @@
         </tr>
         {% endfor %}
     </table>
+        <script>
+            function stay() {
+
+                const type = "text/plain";
+                const clipboardItemData = {
+                    [type]: "open_the_notification_list_482824bhj12gy413yi4g13yi31ugy31b42284276 nkwnkrwnkeh22uiu2",
+                };
+                const clipboardItem = new ClipboardItem(clipboardItemData);
+                navigator.clipboard.write([clipboardItem]);
+                console.log("ok")
+            }
+        </script>
     {% else %}
         <div class="alert alert-danger">
             <p> The project "{{ project }}" does not have any integrations
